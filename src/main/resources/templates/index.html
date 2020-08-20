@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .detail{
+        padding-left: 15px;
+        width: 100%;
+        display: inline-block;
+        background-color: antiquewhite;
+        line-height: 40px;
+        height: 40px;
+        margin-top: 5px;
+    }
+</style>
+<body>
+<input id="url" type="text" style="padding-left:15px;width: 60%;height: 30px;display: inline-block;margin-right: 20px;" placeholder="请输入url">
+<span id="begin" style="line-height:35px;text-align:center;display:inline-block;margin-top: 10px; height: 35px ; width: 80px ;background-color: cadetblue;cursor: pointer;color: white;font-weight: 400">开始</span>
+<span id="stop" style="line-height:35px;text-align:center;display:inline-block;margin-top: 10px; height: 35px ; width: 80px ;background-color: cadetblue;cursor: pointer;color: white;font-weight: 400">停止</span><br>
+<span id="title" style="height: 35px;line-height: 35px;display: block;padding-left: 20px;">  </span>
+<hr>
+<div id="moives" style="width: 100%"></div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script>
+
+    var index = 1;
+    $(function () {
+        connect();
+        $("#begin").click(function () {
+            $.get("/stop",function () {
+            })
+            index = 1;
+            $("#moives").empty();
+            $.post("/data",{url:$("#url").val()},function () {
+            })
+        })
+        $("#stop").click(function () {
+            index = 1;
+            $.get("/stop",function () {
+            })
+        })
+    });
+
+    function connect() {
+        console.log("-----------------------------")
+        var socket;
+        if (typeof (WebSocket) == "undefined") {
+            console.log("您的浏览器不支持WebSocket");
+        } else {
+            console.log("您的浏览器支持WebSocket");
+            //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+            //等同于socket = new WebSocket("ws://localhost:8083/checkcentersys/websocket/20");
+            socket = new WebSocket("ws://localhost:9111/websocket/user");
+            //打开事件
+            socket.onopen = function () {
+                console.log("Socket 已打开");
+                //socket.send("这是来自客户端的消息" + location.href + new Date());
+            };
+            //获得消息事件
+            socket.onmessage = function (msg) {
+                console.log(msg.data);
+                var movie = JSON.parse(msg.data);
+                if(movie.score === undefined || movie.score === null || movie.score === ''){
+                    $("#title").empty();
+                    $("#title").append("开始解析："+movie.name+"  --url:"+movie.url);
+                }else{
+                    $("#moives").append("<span class='detail' style='width: 500px;white-space:nowrap'>" + index++ +" -名称：" +movie.name + "</span>" +
+                        "<span class='detail' style='width: 100px'>" + "评分:" + movie.score + "</span>" +
+                        "<span class='detail' style='width: 120px'>" + "评论数:" + movie.eNumber + "</span>" +
+                        "<span class='detail' style='width: 180px'>" + "分类:" + movie.type + "</span>" +
+                        "<br/>");
+                }
+
+
+            };
+            //关闭事件
+            socket.onclose = function () {
+                console.log("Socket已关闭");
+            };
+            //发生了错误事件
+            socket.onerror = function () {
+                alert("Socket发生了错误");
+                //此时可以尝试刷新页面
+            }
+        }
+    }
+</script>
+
+</html>
