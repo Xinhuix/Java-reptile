@@ -44,6 +44,10 @@ public class WebCrawlerUtil {
         return "";
     }
 
+    public static List<String> parseList(String body, String xPath) {
+        return parse(body, xPath);
+    }
+
     private static Object[] baseParse(String body, String xPath){
         HtmlCleaner cleaner = new HtmlCleaner();
         TagNode clean = cleaner.clean(body);

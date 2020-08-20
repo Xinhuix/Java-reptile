@@ -12,4 +12,8 @@ public class DoubanConstant {
 
     public final static String DOUBAN_MOVIE_EXPLORE = "https://movie.douban.com/j/search_subjects?type=movie&tag=%E5%8D%8E%E8%AF%AD&sort=recommend&page_limit=20&page_start=100";
 
+
+    public final static String DOUBAN_MOVIE_URL_XPATH = "//*[@class=\"entry-title\"]";
+
+    public final static String MOVIE_URL = "//*[@class=\"entry-title\"]/href=\"([^\"]*?)\"/i";
 }

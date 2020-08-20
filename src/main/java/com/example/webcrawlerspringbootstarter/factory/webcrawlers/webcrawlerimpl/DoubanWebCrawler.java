@@ -18,16 +18,18 @@ import java.util.List;
  */
 public class DoubanWebCrawler implements WebCrawler<MovieData> {
 
+    private static final Integer flag = 1;
+
     private MovieData parseDetail(MovieData movieData) {
         TimeUtil.sleepRandom(1200);
         String detail = WebCrawlerUtil.downloadPageContext(movieData.getUrl());
-        System.out.println("这是豆瓣响应数据：" + detail);
+      //  System.out.println("这是豆瓣响应数据：" + detail);
         String name = WebCrawlerUtil.parseOne(detail, DoubanConstant.DOUBAN_MOVIE_NAME_XPATH);
         String type = WebCrawlerUtil.parseOne(detail, DoubanConstant.DOUBAN_MOVIE_TYPE_XPATH);
         String eNumber = WebCrawlerUtil.parseOne(detail, DoubanConstant.DOUBAN_MOVIE_ENUMBER_XPATH);
         String score = WebCrawlerUtil.parseOne(detail, DoubanConstant.DOUBAN_MOVIE_SCORE_XPATH);
         movieData.setName(name);
-        movieData.setENumber(eNumber);
+        movieData.seteNumber(eNumber);
         movieData.setScore(score);
         movieData.setType(type);
         return movieData;
@@ -35,9 +37,14 @@ public class DoubanWebCrawler implements WebCrawler<MovieData> {
 
 
     private List<MovieData> getAll(String url) {
+        System.out.println(url);
         String json = WebCrawlerUtil.downloadPageContext(url);
-        System.out.println(json);
+        if (flag == 1){
+            getFilmData(json);
+        }
+        System.out.println("转josn前："+json);
         JSONObject jsonObject = JSONObject.parseObject(json);
+        System.out.println("转josn后："+jsonObject);
         JSONArray jsonArray = (JSONArray) jsonObject.get("subjects");
         List<MovieData> list = new ArrayList<>();
         for (Object obj : jsonArray) {
@@ -62,6 +69,16 @@ public class DoubanWebCrawler implements WebCrawler<MovieData> {
                 parseDetail(movieData);
                 urlQueue.push(movieData);
             }
+        }
+    }
+
+
+    private static void getFilmData(String str){
+        TimeUtil.sleepRandom(1200);
+        //  System.out.println("这是豆瓣响应数据：" + detail);
+        List<String> strings = WebCrawlerUtil.parseList(str, DoubanConstant.MOVIE_URL);
+        for (String string : strings) {
+            System.out.println(string);
         }
     }
 }
