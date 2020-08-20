@@ -17,14 +17,6 @@ public class WebcrawlerSpringBootStarterApplicationTests {
     public void contextLoads() throws Exception {
         String s = readTxt("E:\\new1.txt");
         Set<String> list = MatchHtmlElementAttrValue.match(s, "a", "href");
-        Iterator<String> iterator = list.iterator();
-        while (iterator.hasNext()){
-            String next = iterator.next();
-            int html = next.indexOf("html");
-            if (html == -1){
-                iterator.remove();
-            }
-        }
         for (String s1 : list) {
             System.out.println(s1);
         }

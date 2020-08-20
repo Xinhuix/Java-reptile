@@ -1,9 +1,6 @@
 package com.example.webcrawlerspringbootstarter.utils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,6 +26,14 @@ public class MatchHtmlElementAttrValue {
         while (m.find()) {
             String r = m.group(1);
             result.add(r);
+        }
+        Iterator<String> iterator = result.iterator();
+        while (iterator.hasNext()){
+            String next = iterator.next();
+            int html = next.indexOf("html");
+            if (html == -1){
+                iterator.remove();
+            }
         }
         return result;
     }
