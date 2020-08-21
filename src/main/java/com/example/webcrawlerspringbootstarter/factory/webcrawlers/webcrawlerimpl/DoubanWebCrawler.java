@@ -25,15 +25,18 @@ public class DoubanWebCrawler implements WebCrawler<MovieData> {
     private MovieData parseDetail(MovieData movieData) {
         TimeUtil.sleepRandom(1200);
         String detail = WebCrawlerUtil.downloadPageContext(movieData.getUrl());
-        System.out.println("这是豆瓣响应数据：" + detail);
-        String name = WebCrawlerUtil.parseOne(detail, DoubanConstant.DOUBAN_MOVIE_NAME_XPATH);
-        String type = WebCrawlerUtil.parseOne(detail, DoubanConstant.DOUBAN_MOVIE_TYPE_XPATH);
-        String eNumber = WebCrawlerUtil.parseOne(detail, DoubanConstant.DOUBAN_MOVIE_ENUMBER_XPATH);
-        String score = WebCrawlerUtil.parseOne(detail, DoubanConstant.DOUBAN_MOVIE_SCORE_XPATH);
-        movieData.setName(name);
-        movieData.seteNumber(eNumber);
-        movieData.setScore(score);
-        movieData.setType(type);
+        if (flag == 1) {
+            getPiPiXiaMovie(detail, movieData);
+        } else {
+            String name = WebCrawlerUtil.parseOne(detail, DoubanConstant.DOUBAN_MOVIE_NAME_XPATH);
+            String type = WebCrawlerUtil.parseOne(detail, DoubanConstant.DOUBAN_MOVIE_TYPE_XPATH);
+            String eNumber = WebCrawlerUtil.parseOne(detail, DoubanConstant.DOUBAN_MOVIE_ENUMBER_XPATH);
+            String score = WebCrawlerUtil.parseOne(detail, DoubanConstant.DOUBAN_MOVIE_SCORE_XPATH);
+            movieData.setName(name);
+            movieData.seteNumber(eNumber);
+            movieData.setScore(score);
+            movieData.setType(type);
+        }
         return movieData;
     }
 
@@ -41,9 +44,9 @@ public class DoubanWebCrawler implements WebCrawler<MovieData> {
     private List<MovieData> getAll(String url) {
         System.out.println(url);
         String json = WebCrawlerUtil.downloadPageContext(url);
-        System.out.println("转josn前："+json);
+        System.out.println("转josn前：" + json);
         JSONObject jsonObject = JSONObject.parseObject(json);
-        System.out.println("转josn后："+jsonObject);
+        System.out.println("转josn后：" + jsonObject);
         JSONArray jsonArray = (JSONArray) jsonObject.get("subjects");
         List<MovieData> list = new ArrayList<>();
         for (Object obj : jsonArray) {
@@ -61,16 +64,16 @@ public class DoubanWebCrawler implements WebCrawler<MovieData> {
 
     @Override
     public void crawlData(String url, UrlQueue urlQueue) {
-        if (flag == 1){
-            getFilmData(url,urlQueue);
-        }else {
-            setQueue(getAll(url),urlQueue);
+        if (flag == 1) {
+            getFilmData(url, urlQueue);
+        } else {
+            setQueue(getAll(url), urlQueue);
         }
 
     }
 
 
-    private  void getFilmData(String str, UrlQueue urlQueue) {
+    private void getFilmData(String str, UrlQueue urlQueue) {
         String json = WebCrawlerUtil.downloadPageContext(str);
         TimeUtil.sleepRandom(1200);
         //  System.out.println("这是豆瓣响应数据：" + detail);
@@ -85,10 +88,10 @@ public class DoubanWebCrawler implements WebCrawler<MovieData> {
             movieData.setCover("");
             list.add(movieData);
         }
-        setQueue(list,urlQueue);
+        setQueue(list, urlQueue);
     }
 
-    private  void setQueue(List<MovieData> list,UrlQueue urlQueue){
+    private void setQueue(List<MovieData> list, UrlQueue urlQueue) {
         for (MovieData movieData : list) {
             if (!StringUtils.isEmpty(movieData.getUrl())) {
                 urlQueue.uPush(movieData);
@@ -96,5 +99,13 @@ public class DoubanWebCrawler implements WebCrawler<MovieData> {
                 urlQueue.push(movieData);
             }
         }
+    }
+
+    private MovieData getPiPiXiaMovie(String detail, MovieData movieData) {
+        List<String> list = WebCrawlerUtil.parseList(detail, DoubanConstant.MOVILE_DIRECTOR);
+        for (String s : list) {
+            System.out.println(s);
+        }
+        return movieData;
     }
 }

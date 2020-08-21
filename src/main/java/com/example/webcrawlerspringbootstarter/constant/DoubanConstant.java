@@ -16,4 +16,7 @@ public class DoubanConstant {
     public final static String DOUBAN_MOVIE_URL_XPATH = "//*[@class=\"entry-title\"]";
 
     public final static String MOVIE_URL = "//*[@class=\"entry-title\"]/href=\"([^\"]*?)\"/i";
+
+    public final static String MOVILE_DIRECTOR = "//*[@class=\"entry-content u-clearfix\"]/p";
+
 }

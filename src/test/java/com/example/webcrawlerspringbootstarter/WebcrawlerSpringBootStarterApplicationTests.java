@@ -1,10 +1,13 @@
 package com.example.webcrawlerspringbootstarter;
 
+import com.example.webcrawlerspringbootstarter.constant.DoubanConstant;
 import com.example.webcrawlerspringbootstarter.utils.MatchHtmlElementAttrValue;
+import com.example.webcrawlerspringbootstarter.utils.WebCrawlerUtil;
 import org.junit.Test;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class WebcrawlerSpringBootStarterApplicationTests {
@@ -13,13 +16,20 @@ public class WebcrawlerSpringBootStarterApplicationTests {
 
     public final static String DOUBAN_MOVIE_URL_XPATH = "//*[@class=\"entry-title\"]/a";
 
+    //导演
+    public final static String MOVILE_DIRECTOR = "//*[@class=\"entry-content u-clearfix\"]/p";
+
     @Test
     public void contextLoads() throws Exception {
-        String s = readTxt("E:\\new1.txt");
-        Set<String> list = MatchHtmlElementAttrValue.match(s, "a", "href");
+        String s = readTxt("D:\\new.txt");
+        List<String> list = WebCrawlerUtil.parseList(s, MOVILE_DIRECTOR);
         for (String s1 : list) {
             System.out.println(s1);
         }
+      /*  Set<String> list = MatchHtmlElementAttrValue.match(s, "a", "href");
+        for (String s1 : list) {
+            System.out.println(s1);
+        }*/
     }
 
 //    public final static String DOUBAN_MOVIE_NAME_XPATH = "//*[@id=\"content\"]/h1/span[1]";
