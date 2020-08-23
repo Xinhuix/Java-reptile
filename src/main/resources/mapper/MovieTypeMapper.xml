@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.webcrawlerspringbootstarter.dao.MovieTypeMapper">
+  <resultMap id="BaseResultMap" type="com.example.webcrawlerspringbootstarter.entity.MovieType">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="type" jdbcType="BIGINT" property="type" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="create_tim" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, type, type_name, create_time
+  </sql>
+
+  <select id="selectMovieMaxType" resultType="com.example.webcrawlerspringbootstarter.entity.MovieType">
+      SELECT id,MAX(type) AS type,type_name AS typeName,create_time AS createTime FROM `movie_type`
+  </select>
+</mapper>

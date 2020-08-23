@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.webcrawlerspringbootstarter.dao.MovieMapper">
+  <resultMap id="BaseResultMap" type="com.example.webcrawlerspringbootstarter.entity.Movie">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="director" jdbcType="VARCHAR" property="director" />
+    <result column="screenwriter" jdbcType="VARCHAR" property="screenwriter" />
+    <result column="starring" jdbcType="VARCHAR" property="starring" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="language" jdbcType="VARCHAR" property="language" />
+    <result column="release_time" jdbcType="VARCHAR" property="releaseTime" />
+    <result column="episode" jdbcType="VARCHAR" property="episode" />
+    <result column="duration" jdbcType="VARCHAR" property="duration" />
+    <result column="alias" jdbcType="VARCHAR" property="alias" />
+    <result column="link" jdbcType="VARCHAR" property="link" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, create_time, name, director, screenwriter, starring, type, country, language, 
+    release_time, episode, duration, alias, link
+  </sql>
+</mapper>

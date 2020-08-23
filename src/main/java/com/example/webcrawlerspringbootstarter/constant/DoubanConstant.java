@@ -12,11 +12,34 @@ public class DoubanConstant {
 
     public final static String DOUBAN_MOVIE_EXPLORE = "https://movie.douban.com/j/search_subjects?type=movie&tag=%E5%8D%8E%E8%AF%AD&sort=recommend&page_limit=20&page_start=100";
 
+    public final static String MOVIE_WORKER = "//*[@class=\"entry-content u-clearfix\"]/p";
 
     public final static String DOUBAN_MOVIE_URL_XPATH = "//*[@class=\"entry-title\"]";
 
     public final static String MOVIE_URL = "//*[@class=\"entry-title\"]/href=\"([^\"]*?)\"/i";
 
-    public final static String MOVILE_DIRECTOR = "//*[@class=\"entry-content u-clearfix\"]/p";
+    public final static String MOVIE_NAME = "//*[@class=\"entry-title\"]";
+
+    public final static String MOVIE_DIRECTOR = "导演";
+
+    public final static String MOVIE_STARRING = "主演";
+
+    public final static String MOVIE_SCREENWRITER = "编剧";
+
+    public final static String MOVIE_TYPE = "类型";
+
+    public final static String MOVIE_COUNTRY = "制片国家/地区";
+
+    public final static String MOVIE_LANGUAGE = "语言";
+
+    public final static String MOVIE_RELEASE_TIME = "上映时间";
+
+    public final static String MOVIE_EPISODE = "集数";
+
+    public final static String MOVIE_DURATION = "时长";
+
+    public final static String MOVIE_ALIAS = "别名";
+
+    public final static String MOVIE_LINK = "IMDb链接";
 
 }
