@@ -1,3 +1,4 @@
+/*
 package com.example.webcrawlerspringbootstarter;
 
 import com.example.webcrawlerspringbootstarter.utils.WebCrawlerUtil;
@@ -30,10 +31,12 @@ public class WebcrawlerSpringBootStarterApplicationTests {
         String substring = split[0].substring(1);
         //  System.out.println( new String(s.getBytes("UTF-8"),"UTF-8"));
 
-      /*  Set<String> list = MatchHtmlElementAttrValue.match(s, "a", "href");
+      */
+/*  Set<String> list = MatchHtmlElementAttrValue.match(s, "a", "href");
         for (String s1 : list) {
             System.out.println(s1);
-        }*/
+        }*//*
+
     }
 
     @Test
@@ -96,3 +99,4 @@ public class WebcrawlerSpringBootStarterApplicationTests {
 }
 
 
+*/
