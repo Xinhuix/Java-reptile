@@ -16,4 +16,5 @@ public interface WebCrawlerService extends Runnable {
      * 爬虫停止抓取数据
      */
     void stopCrawler();
+
 }

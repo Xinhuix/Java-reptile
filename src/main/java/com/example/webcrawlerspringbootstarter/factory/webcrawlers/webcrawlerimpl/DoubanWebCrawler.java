@@ -142,7 +142,9 @@ public class DoubanWebCrawler implements WebCrawler<MovieData> {
                     //查询电影类型是否存在
                     for (String typeName : movieType) {
                         Example example = new Example(MovieType.class);
-                        example.createCriteria().andEqualTo("typeName", typeName);
+                        example.createCriteria().andEqualTo("typeName", "123456");
+                        MovieType movieMaxType1 = movieTypeMapper.selectMovieMaxType();
+                        System.out.println(movieMaxType1);
                         List<MovieType> movieTypes = movieTypeMapper.selectByExample(example);
                         if (ListUtils.isEmpty(movieTypes)) {
                             //查询最大type类型值

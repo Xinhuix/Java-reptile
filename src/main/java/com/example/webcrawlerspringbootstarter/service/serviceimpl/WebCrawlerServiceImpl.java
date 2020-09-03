@@ -1,13 +1,21 @@
 package com.example.webcrawlerspringbootstarter.service.serviceimpl;
 
+import com.example.webcrawlerspringbootstarter.dao.MovieTypeMapper;
+import com.example.webcrawlerspringbootstarter.entity.MovieType;
 import com.example.webcrawlerspringbootstarter.factory.UrlQueue;
 import com.example.webcrawlerspringbootstarter.factory.WebCrawlerFactory;
 import com.example.webcrawlerspringbootstarter.factory.webcrawlers.WebCrawler;
 import com.example.webcrawlerspringbootstarter.service.WebCrawlerService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @author zhangnan
  */
+@Service
+@Slf4j
 public class WebCrawlerServiceImpl extends Thread implements WebCrawlerService {
 
     private String url;

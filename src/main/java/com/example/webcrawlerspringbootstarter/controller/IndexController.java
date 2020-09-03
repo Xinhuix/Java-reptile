@@ -35,6 +35,8 @@ public class IndexController {
 
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
+    @Autowired
+    private WebCrawlerService webCrawlerService;
 
     @Value("${crawler.type}")
     private String type;
