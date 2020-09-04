@@ -19,4 +19,9 @@ management:
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.example.webcrawlerspringbootstarter.**.entity
-
+# logger 配置
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    org.springframework.web: error
+    com.example.webcrawlerspringbootstarter: debug

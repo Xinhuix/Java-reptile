@@ -17,4 +17,5 @@ public interface WebCrawlerService extends Runnable {
      */
     void stopCrawler();
 
+
 }

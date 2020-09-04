@@ -2,6 +2,8 @@ package com.example.webcrawlerspringbootstarter.service;
 
 import com.example.webcrawlerspringbootstarter.entity.MovieType;
 
+import java.util.List;
+
 /**
  * @ClassName MovieTypeService
  * @Description
@@ -23,6 +25,11 @@ public interface MovieTypeService {
      * @param value
      * @return
      */
-    MovieType getMovieTypByKey(String key, Object value);
+    List<MovieType> getMovieTypByKey(String key, Object value);
 
+    /**
+     * 插入电影类型
+     * @param movieType
+     */
+    void insertMovieType(MovieType movieType);
 }

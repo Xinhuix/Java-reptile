@@ -59,7 +59,7 @@ public class Movie {
      * 上映时间
      */
     @Column(name = "release_time")
-    private String releaseTime;
+    private Date releaseTime;
 
     /**
      * 集数

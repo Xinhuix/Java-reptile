@@ -1,15 +1,15 @@
 package com.example.webcrawlerspringbootstarter.service.serviceimpl;
 
-import com.example.webcrawlerspringbootstarter.dao.MovieTypeMapper;
 import com.example.webcrawlerspringbootstarter.entity.MovieType;
 import com.example.webcrawlerspringbootstarter.factory.UrlQueue;
 import com.example.webcrawlerspringbootstarter.factory.WebCrawlerFactory;
 import com.example.webcrawlerspringbootstarter.factory.webcrawlers.WebCrawler;
+import com.example.webcrawlerspringbootstarter.service.MovieTypeService;
 import com.example.webcrawlerspringbootstarter.service.WebCrawlerService;
+import com.example.webcrawlerspringbootstarter.utils.BeanContext;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 /**
  * @author zhangnan
@@ -20,6 +20,8 @@ public class WebCrawlerServiceImpl extends Thread implements WebCrawlerService {
 
     private String url;
     private UrlQueue urlQueue;
+    private WebCrawler webCrawler;
+
 
     @Override
     public void startCrawler(String url, UrlQueue urlQueue) {
@@ -33,10 +35,13 @@ public class WebCrawlerServiceImpl extends Thread implements WebCrawlerService {
         this.interrupt();
     }
 
+
     @Override
     public void run() {
-        WebCrawler webCrawler = WebCrawlerFactory.getWebCrawler(url);
-        assert webCrawler != null;
-        webCrawler.crawlData(url,urlQueue);
+        this.webCrawler = BeanContext.getApplicationContext().getBean(WebCrawler.class);
+
+        /*WebCrawler webCrawler = WebCrawlerFactory.getWebCrawler(url);
+        assert webCrawler != null;*/
+        webCrawler.crawlData(url, urlQueue);
     }
 }

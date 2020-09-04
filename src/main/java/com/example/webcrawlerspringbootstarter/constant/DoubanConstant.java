@@ -1,5 +1,8 @@
 package com.example.webcrawlerspringbootstarter.constant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DoubanConstant {
 
     public final static String DOUBAN_DETAIL = "https://movie.douban.com/subject/27010768/?tag=%E7%83%AD%E9%97%A8&from=gaia";
@@ -36,9 +39,25 @@ public class DoubanConstant {
 
     public final static String MOVIE_EPISODE = "集数";
 
-    public final static String MOVIE_DURATION = "时长";
+    public static List<String> movieDuration = new ArrayList<>();
+    public static List<String> movieAlias = new ArrayList<>();
+    public static List<String> movieReleaseTime = new ArrayList<>();
 
-    public final static String MOVIE_ALIAS = "别名";
+
+    static {
+        movieDuration.add("时长");
+        movieDuration.add("片长");
+        movieAlias.add("别名");
+        movieAlias.add("又名");
+        movieReleaseTime.add("上映时间");
+        movieReleaseTime.add("上映日期");
+        movieReleaseTime.add("首播");
+
+    }
+
+    public final static String MOVIE_DURATION = "时长片长";
+
+    public final static String MOVIE_ALIAS = "";
 
     public final static String MOVIE_LINK = "IMDb链接";
 

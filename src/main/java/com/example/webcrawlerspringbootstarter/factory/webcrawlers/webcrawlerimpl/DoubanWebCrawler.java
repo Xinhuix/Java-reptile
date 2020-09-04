@@ -3,22 +3,23 @@ package com.example.webcrawlerspringbootstarter.factory.webcrawlers.webcrawlerim
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.webcrawlerspringbootstarter.constant.DoubanConstant;
-import com.example.webcrawlerspringbootstarter.dao.MovieTypeMapper;
 import com.example.webcrawlerspringbootstarter.entity.Movie;
 import com.example.webcrawlerspringbootstarter.entity.MovieData;
 import com.example.webcrawlerspringbootstarter.entity.MovieType;
 import com.example.webcrawlerspringbootstarter.factory.UrlQueue;
 import com.example.webcrawlerspringbootstarter.factory.webcrawlers.WebCrawler;
+import com.example.webcrawlerspringbootstarter.service.MovieService;
+import com.example.webcrawlerspringbootstarter.service.MovieTypeService;
+import com.example.webcrawlerspringbootstarter.utils.DateUtil;
 import com.example.webcrawlerspringbootstarter.utils.MatchHtmlElementAttrValue;
 import com.example.webcrawlerspringbootstarter.utils.TimeUtil;
 import com.example.webcrawlerspringbootstarter.utils.WebCrawlerUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.thymeleaf.util.ListUtils;
-import tk.mybatis.mapper.entity.Example;
+import org.thymeleaf.util.StringUtils;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,8 +32,10 @@ import java.util.Set;
 @Slf4j
 public class DoubanWebCrawler implements WebCrawler<MovieData> {
 
-    @Resource
-    private MovieTypeMapper movieTypeMapper;
+    @Autowired
+    private MovieTypeService movieTypeService;
+    @Autowired
+    private MovieService movieService;
 
     private static final Integer flag = 1;
 
@@ -51,6 +54,12 @@ public class DoubanWebCrawler implements WebCrawler<MovieData> {
             movieData.setScore(score);
             movieData.setType(type);
         }
+        movieData.setRate("123");
+        movieData.setScore("99");
+        movieData.setCover("www.baidu.com");
+        movieData.setPlayable(true);
+        movieData.seteNumber("123456");
+        log.info("这是组装响应回去的数据：{}", movieData);
         return movieData;
     }
 
@@ -120,52 +129,98 @@ public class DoubanWebCrawler implements WebCrawler<MovieData> {
         List<String> names = WebCrawlerUtil.parseList(detail, DoubanConstant.MOVIE_NAME);
         String[] split = names.get(0).split("]");
         String name = split[0].substring(1);
-        System.out.println("这是电影名字：" + name);
-        System.out.println("条数：" + list.size());
-        String textStr[] = list.get(0).split("\\r\\n|\\n|\\r");
+        String[] textStr = list.get(0).split("\\r\\n|\\n|\\r");
         Movie movie = new Movie();
+        movie.setCreateTime(DateUtil.getDate());
         if (textStr.length != 0) {
             movie.setName(name);
             for (String data : textStr) {
+                String content = data.substring(data.indexOf(":") + 1, data.length());
+                String typeName = data.substring(0, data.indexOf(":"));
                 if (data.contains(DoubanConstant.MOVIE_DIRECTOR)) {
-                    movie.setDirector(data);
+                    movie.setDirector(content);
+                    continue;
                 }
                 if (data.contains(DoubanConstant.MOVIE_SCREENWRITER)) {
-                    movie.setScreenwriter(data);
+                    movie.setScreenwriter(content);
+                    continue;
                 }
                 if (data.contains(DoubanConstant.MOVIE_STARRING)) {
-                    movie.setStarring(data);
+                    movie.setStarring(content);
+                    continue;
                 }
                 if (data.contains(DoubanConstant.MOVIE_TYPE)) {
+                    movieData.setName(name);
+                    movieData.setType(data);
                     movie.setType(data);
-                    String[] movieType = data.substring(data.indexOf(":") + 1).split("/");
-                    //查询电影类型是否存在
-                    for (String typeName : movieType) {
-                        Example example = new Example(MovieType.class);
-                        example.createCriteria().andEqualTo("typeName", "123456");
-                        MovieType movieMaxType1 = movieTypeMapper.selectMovieMaxType();
-                        System.out.println(movieMaxType1);
-                        List<MovieType> movieTypes = movieTypeMapper.selectByExample(example);
-                        if (ListUtils.isEmpty(movieTypes)) {
-                            //查询最大type类型值
-                            MovieType movieMaxType = movieTypeMapper.selectMovieMaxType();
-                            //未找到该类型，则创建
-                            MovieType type = new MovieType();
-                            type.setType(movieMaxType.getType() + 1);
-                            type.setCreateTime(new Date());
-                            type.setTypeName(typeName);
-                            movieTypeMapper.insertSelective(type);
-                        }
+                    //校验是否存在电影类型，不存在则插入
+                    isExistMovieType(data);
+                    continue;
+                }
+                if (data.contains(DoubanConstant.MOVIE_COUNTRY)) {
+                    movie.setCountry(content);
+                    continue;
+                }
+                if (data.contains(DoubanConstant.MOVIE_LANGUAGE)) {
+                    movie.setLanguage(content);
+                    continue;
+                }
+                if (DoubanConstant.movieReleaseTime.contains(typeName)) {
+                    content = content.replaceAll("\\u00A0", "");
+                    if (data.indexOf("(") != -1) {
+                        movie.setReleaseTime(DateUtil.formatting(content.substring(0, content.indexOf("(")),
+                                DateUtil.FORMATTING_DATE));
+                    } else {
+                        movie.setReleaseTime(DateUtil.formatting(content, DateUtil.FORMATTING_DATE));
                     }
+                    continue;
+                }
+                if (data.contains(DoubanConstant.MOVIE_EPISODE)) {
+                    movie.setEpisode(content);
+                    continue;
+                }
+                if (DoubanConstant.movieDuration.contains(typeName)) {
+                    movie.setDuration(content);
+                    continue;
+                }
+                if (DoubanConstant.movieAlias.contains(typeName)) {
+                    movie.setAlias(content);
+                    continue;
+                }
+                if (data.contains(DoubanConstant.MOVIE_LINK)) {
+                    movie.setLink(content);
                 }
             }
+        }
+        //插入電影
+        if (null != movie) {
+            log.info("插入電影數據：{}", movie);
+            movieService.insertMovie(movie);
         }
 
         return movieData;
     }
 
-    public static void main(String[] args) {
-        String cc = "类型: 惊悚 / 恐怖";
-
+    /**
+     * 校验是否存在电影类型，不存在则插入
+     *
+     * @param data
+     */
+    private void isExistMovieType(String data) {
+        String[] movieType = data.substring(data.indexOf(":") + 1).split("/");
+        //查询电影类型是否存在
+        for (String typeName : movieType) {
+            List<MovieType> movieTypes = movieTypeService.getMovieTypByKey("typeName", typeName);
+            if (ListUtils.isEmpty(movieTypes)) {
+                //查询最大type类型值
+                MovieType movieMaxType = movieTypeService.selectMovieMaxType();
+                //未找到该类型，则创建
+                MovieType type = new MovieType();
+                type.setType(movieMaxType.getType() + 1);
+                type.setCreateTime(new Date());
+                type.setTypeName(typeName);
+                movieTypeService.insertMovieType(type);
+            }
+        }
     }
 }

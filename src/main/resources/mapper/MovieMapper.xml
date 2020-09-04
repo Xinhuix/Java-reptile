@@ -14,7 +14,7 @@
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="country" jdbcType="VARCHAR" property="country" />
     <result column="language" jdbcType="VARCHAR" property="language" />
-    <result column="release_time" jdbcType="VARCHAR" property="releaseTime" />
+    <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime" />
     <result column="episode" jdbcType="VARCHAR" property="episode" />
     <result column="duration" jdbcType="VARCHAR" property="duration" />
     <result column="alias" jdbcType="VARCHAR" property="alias" />
