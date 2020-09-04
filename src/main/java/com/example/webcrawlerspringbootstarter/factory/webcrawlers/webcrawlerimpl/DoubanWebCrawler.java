@@ -9,6 +9,7 @@ import com.example.webcrawlerspringbootstarter.entity.MovieType;
 import com.example.webcrawlerspringbootstarter.factory.UrlQueue;
 import com.example.webcrawlerspringbootstarter.factory.webcrawlers.WebCrawler;
 import com.example.webcrawlerspringbootstarter.service.MovieService;
+import com.example.webcrawlerspringbootstarter.service.MovieStarService;
 import com.example.webcrawlerspringbootstarter.service.MovieTypeService;
 import com.example.webcrawlerspringbootstarter.utils.DateUtil;
 import com.example.webcrawlerspringbootstarter.utils.MatchHtmlElementAttrValue;
@@ -36,6 +37,8 @@ public class DoubanWebCrawler implements WebCrawler<MovieData> {
     private MovieTypeService movieTypeService;
     @Autowired
     private MovieService movieService;
+    @Autowired
+    private MovieStarService movieStarService;
 
     private static final Integer flag = 1;
 
@@ -146,6 +149,8 @@ public class DoubanWebCrawler implements WebCrawler<MovieData> {
                     continue;
                 }
                 if (data.contains(DoubanConstant.MOVIE_STARRING)) {
+                    String[] starName = content.split("/");
+
                     movie.setStarring(content);
                     continue;
                 }
